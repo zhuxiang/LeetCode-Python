@@ -5,17 +5,13 @@ class Solution(object):
         :type cost: List[int]
         :rtype: int
         """
-        # get the number of the gas stations
+        total = 0
+        start = 0
         n = len(gas)
-        # try every gas station
+        subsum = float('inf')
         for i in xrange(n):
-            gasInTank = 0
-            count = 0
-            j = i
-            while gasInTank >= 0 and gas[j%n] + gasInTank >= cost[j%n] and count < n:
-                gasInTank += gas[j%n] - cost[j%n]
-                j += 1
-                count += 1
-            if count == n:
-                return i
-        return -1
+            total += gas[i] - cost[i]
+            if total < subsum:
+                subsum = total
+                start = i + 1
+        return -1 if total < 0 else (start % n)

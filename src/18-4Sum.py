@@ -5,13 +5,25 @@ class Solution(object):
         :type target: int
         :rtype: List[List[int]]
         """
+        if not nums:
+            return []
+        
         numsSorted = sorted(nums)
         result = []
+        
+        if numsSorted[0] * 4 > target or numsSorted[-1] * 4 < target:
+            return []
+        
         i = 0
         while i < len(numsSorted)-3:
             if i != 0 and numsSorted[i] == numsSorted[i-1]:
                 i += 1
                 continue
+            if numsSorted[i] + numsSorted[-1] * 3 < target:
+                i += 1
+                continue
+            if numsSorted[i] * 4 > target:
+                break
             n1 = numsSorted[i]
             resultRemain = self.threeSum(numsSorted[i+1:], target - n1)
             if resultRemain:
@@ -26,13 +38,25 @@ class Solution(object):
         :type target: int
         :rtype: List[List[int]]
         """
+        if not nums:
+            return []
+        
         numsSorted = sorted(nums)
         result = []
+        
+        if numsSorted[0] * 3 > target or numsSorted[-1] * 3 < target:
+            return []
+        
         i = 0
         while i < len(numsSorted) - 2:
             if i != 0 and numsSorted[i] == numsSorted[i-1]:
                 i += 1
                 continue
+            if numsSorted[i] + 2 * numsSorted[-1] < target:
+                i += 1
+                continue
+            if numsSorted[i] * 3 > target:
+                break
             n1 = numsSorted[i]
             j, k = i + 1, len(numsSorted) - 1
             while j < k:

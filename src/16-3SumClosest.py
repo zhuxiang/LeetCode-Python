@@ -9,8 +9,10 @@ class Solution(object):
         """
         numsSorted = sorted(nums)
         minDiff, minS = sys.maxint, None
-        for i in xrange(len(numsSorted) - 2):
+        i = 0
+        while i < len(numsSorted) - 2:
             if i != 0 and numsSorted[i] == numsSorted[i-1]:
+                i += 1
                 continue
             n1 = numsSorted[i]
             j, k = i + 1, len(numsSorted) - 1
@@ -31,6 +33,7 @@ class Solution(object):
                     k -= 1
                     while numsSorted[k] == numsSorted[k+1] and j < k:
                         k -= 1
+            i += 1
         return minS
 
 if __name__ == '__main__':

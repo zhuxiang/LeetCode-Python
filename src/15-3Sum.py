@@ -33,8 +33,10 @@ class Solution(object):
         """
         numsSorted = sorted(nums)
         result = []
-        for i in xrange(len(numsSorted) - 2):
+        i = 0
+        while i < len(numsSorted) - 2:
             if i != 0 and numsSorted[i] == numsSorted[i-1]:
+                i += 1
                 continue
             j, k = i+1, len(numsSorted) - 1
             while j < k:
@@ -55,9 +57,10 @@ class Solution(object):
                     k -= 1
                     while numsSorted[k] == numsSorted[k+1] and j < k:
                         k -= 1
+            i += 1
         return result
 
 if __name__ == '__main__':
-    nums = [-2, 0, 1, 1, 2]
+    nums = [-1,0,1,2,-1,-4]
     s = Solution()
     print s.threeSum(nums)

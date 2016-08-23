@@ -1,5 +1,3 @@
-import copy
-
 class Solution(object):
     def findSubstring(self, s, words):
         """

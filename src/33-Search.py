@@ -19,6 +19,6 @@ class Solution(object):
         	while nums[i] > target and i > -len(nums):
         		i -= 1
         	if nums[i] == target:
-        		return len(nums) - i
+        		return len(nums) + i
         	else:
         		return -1

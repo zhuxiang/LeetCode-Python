@@ -5,64 +5,59 @@ class Solution(object):
         :type words: List[str]
         :rtype: List[int]
         """
-        resPos = set()
-        wordCnt = len(words)
-        if wordCnt == 0:
-            return resPos
-        wordLen = len(words[0])
-        substrings = set(self.generateSubstrings(words, wordLen))
-        n = len(s)
-        for substring in substrings:
-            m = len(substring)
-            i, q = 0, 0
-            nextDict = self.makeNext(substring)
-            while i < n:
-                while q > 0 and substring[q] != s[i]:
-                    q = nextDict[q - 1]
-                if substring[q] == s[i]:
-                    q += 1
-                if q == m:
-                    resPos.add(i - m + 1)
-                    q = nextDict[q - 1]
-                i += 1
-        return list(resPos)
+        wordLen = self.calWordLen(words)
+        wordDict = self.genWordDict(words)
+        n = wordLen * len(words)
+        indexList = []
+        for i in xrange(wordLen):
+            start = i
+            chkDict = {}
+            cnt = 0
+            for j in xrange(i, len(s) - wordLen + 1, wordLen):
+                word = s[j:j+wordLen]
+                if word in wordDict:
+                    if word in chkDict:
+                        chkDict[word] += 1
+                    else:
+                        chkDict[word] = 1
+                    cnt += 1
+                    while chkDict[word] > wordDict[word]:
+                        chkDict[s[start:start+wordLen]] -= 1
+                        start += wordLen
+                        cnt -= 1
+                    if cnt == len(words):
+                        indexList.append(start)
+                else:
+                    chkDict = {}
+                    start = j + wordLen
+                    cnt = 0
+        return indexList
 
-    def generateSubstrings(self, words, wordLen):
+    def calWordLen(self, words):
         """
         :type words: List[str]
-        :type wordLen: int
-        :rtype substrings: List[str]
+        :rtype: int
         """
-        if len(words) == 1:
-            yield words[0]
+        if len(words) == 0:
+            return 0
         else:
-            for substring in self.generateSubstrings(words[:-1], wordLen):
-                for i in xrange(len(words)):
-                    yield substring[:i*wordLen] + words[-1] + substring[i*wordLen:]
+            return len(words[0])
 
-    def makeNext(self, pat):
+    def genWordDict(self, words):
         """
-        :type pat: str
-        :rtype next: List[int]
+        :type words: List[str]
+        :rtype: Dict[int]
         """
-        # q: the index of pat
-        # k: the length of maximum prefix and suffix
-        q, k = 1, 0
-        # m: the length of pat
-        m = len(pat)
-        # next: partial match dict for KMP algorithm
-        nextDict = [0] * m
-        while q < m:
-            while k > 0 and pat[q] != pat[k]:
-                k = nextDict[k - 1]
-            if pat[q] == pat[k]:
-                k += 1
-            nextDict[q] = k
-            q += 1
-        return nextDict
+        wordDict = {}
+        for word in words:
+            if wordDict.has_key(word):
+                wordDict[word] += 1
+            else:
+                wordDict[word] = 1
+        return wordDict
 
 if __name__ == '__main__':
-    s = str("aaa")
-    words = ["a","a"]
-    sol = Solution()
-    print sol.findSubstring(s, words)
+    sln = Solution()
+    s = "wordgoodgoodgoodbestword"
+    words = ["word","good","best","good"]
+    print sln.findSubstring(s, words)
